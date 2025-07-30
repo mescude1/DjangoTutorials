@@ -1,0 +1,19 @@
+{% extends 'pages/base.html' %}
+{% block title %} {{title}} {% endblock %}
+{% block header_title %} {{subtitle}} {% endblock %}
+{% block content %}
+<div class="card mb-3">
+<div class="row g-0">
+<div class="col-md-4">
+</div>
+<div class="col-md-8">
+<div class="card-body">
+<h5 class="card-title {% if product.prize > 100 %}text-danger{% endif %}">
+{{product.name}}
+</h5>
+</div>
+    {{product.prize}}
+</div>
+</div>
+</div>
+{% endblock %}
