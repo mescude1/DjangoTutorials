@@ -1,4 +1,4 @@
-#!/home/mao/DjangoTutorials/djenv/bin/python3
+#!/Users/mauricioescudero/PycharmProjects/DjangoTutorials/djenv/bin/python3.13
 # -*- coding: utf-8 -*-
 import re
 import sys

@@ -1,14 +1,17 @@
+from django.contrib import messages
+from django.core.validators import MinValueValidator
 from django.forms import forms, CharField, FloatField
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView
 
 
 # Create your views here.
 
-class homePageView(TemplateView):
-    template_name = 'home.html'
+class HomePageView(TemplateView):
+    template_name = 'pages/home.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -23,7 +26,7 @@ class homePageView(TemplateView):
 
 
 class AboutPageView(TemplateView):
-    template_name = 'about.html'
+    template_name = 'pages/about.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -61,9 +64,10 @@ class ProductShowView(View):
 
     def get(self, request, id):
         viewData = {}
-        product = Product.products[int(id) - 1]
-        if not product:
-            return HttpResponseRedirect("/home")
+        if id:
+            product = Product.products[int(id) - 1]
+            if not product:
+                return HttpResponseRedirect("/home")
         viewData["title"] = product["name"] + " - Online Store"
         viewData["subtitle"] = product["name"] + " - Product information"
         viewData["product"] = product
@@ -72,7 +76,7 @@ class ProductShowView(View):
 
 class ProductForm(forms.Form):
     name = CharField(required=True)
-    price = FloatField(required=True)
+    price = FloatField(required=True, validators=[MinValueValidator(0.01)], error_messages={"invalid": "Este valor debe ser positivo."})
 
 
 class ProductCreateView(View):
@@ -90,7 +94,8 @@ class ProductCreateView(View):
     def post(self, request):
         form = ProductForm(request.POST)
         if form.is_valid():
-            return redirect(form)
+            messages.success(request, "Your form was submitted successfully!")
+            return HttpResponseRedirect(reverse('home'))
         else:
             viewData = {}
             viewData["title"] = "Create product"

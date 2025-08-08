@@ -9,17 +9,17 @@ alias deactivate 'test $?_OLD_VIRTUAL_PATH != 0 && setenv PATH "$_OLD_VIRTUAL_PA
 # Unset irrelevant variables.
 deactivate nondestructive
 
-setenv VIRTUAL_ENV /home/mao/DjangoTutorials/djenv
+setenv VIRTUAL_ENV /Users/mauricioescudero/PycharmProjects/DjangoTutorials/djenv
 
 set _OLD_VIRTUAL_PATH="$PATH"
 setenv PATH "$VIRTUAL_ENV/"bin":$PATH"
+setenv VIRTUAL_ENV_PROMPT djenv
 
 
 set _OLD_VIRTUAL_PROMPT="$prompt"
 
 if (! "$?VIRTUAL_ENV_DISABLE_PROMPT") then
-    set prompt = '(djenv) '"$prompt"
-    setenv VIRTUAL_ENV_PROMPT '(djenv) '
+    set prompt = "("djenv") $prompt:q"
 endif
 
 alias pydoc python -m pydoc

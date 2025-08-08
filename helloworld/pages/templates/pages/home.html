@@ -1,5 +1,12 @@
-@extends('layouts.app')
 {% extends 'pages/base.html' %}
-{% block title %}'Home Page - Online Store'{% endblock %}{% block
-content %}<div class="text-center">Welcome to the application</div>{%
-endblock %}
+{% block title %}'Home Page - Online Store'{% endblock %}
+{% block content %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+<div class="text-center">Welcome to the application</div>
+{% endblock %}
