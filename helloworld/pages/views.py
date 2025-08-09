@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.forms import forms, ModelForm
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView
@@ -118,3 +118,41 @@ class ProductListView(ListView):
         context["title"] = "Products - Online Store"
         context["subtitle"] = "List of products"
         return context
+
+
+class CartView(View):
+    template_name = 'cart/index.html'
+    def get(self, request):
+        products = Product.objects.all()
+        cart_products = {}
+
+        cart_product_data = request.session.get('cart_product_data')
+
+        for key, product in products.items():
+            if str(key) in cart_product_data.keys():
+                cart_products[key] = product
+
+        view_data = {
+            'title': 'Cart - Online Store',
+            'subtitle': 'Shopping cart',
+            'products': products,
+            'cart_products': cart_products
+        }
+
+        return render(request, self.template_name, view_data)
+
+    def post(self, request, product_id):
+        cart_product_data = request.session.get('cart_product_data', {})
+        cart_product_data['product_id'] = product_id
+        request.session['cart_product_data'] = cart_product_data
+
+        return redirect('cart_index')
+
+class CartRemoveAllView(View):
+
+    def post(self, request):
+        cart_products = request.session.get('cart_product_data', {})
+        cart_products.pop_all()
+        request.session['cart_product_data'] = cart_products
+
+        return redirect('cart_index')
